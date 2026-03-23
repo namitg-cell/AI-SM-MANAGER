@@ -28,7 +28,23 @@
       "Bash(npx:*)",
       "Bash(git status:*)",
       "Bash(git diff:*)",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(bash scripts/:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // \"\"' | grep -q 'posts-log' && echo '{\"hookSpecificOutput\": {\"hookEventName\": \"PreToolUse\", \"additionalContext\": \"QUALITY GATE REMINDER: Ensure all posts pass quality checks before logging. Verify: no em dashes, character limits met, no banned words, hashtags present, no placeholders.\"}}' || echo '{}'",
+            "timeout": 10,
+            "statusMessage": "Checking quality gate..."
+          }
+        ]
+      }
     ]
   }
 }
